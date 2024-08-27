@@ -51,7 +51,7 @@ jobs:
           echo "Triggering Prod-EN workflow in Test-1 with the following payload:"
           echo '{"event_type": "event-1", "client_payload": {"ref": "Prod-EN", "commit_message": "${{ env.LATEST_COMMIT_EN }}"}}'
 
-      - name: Repository Dispatch
+      - name: Trigger Prod-EN workflow
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
@@ -67,7 +67,7 @@ jobs:
           echo "Triggering Prod-FR workflow in Test-1 with the following payload:"
           echo '{"event_type": "trigger-prod-fr", "client_payload": {"ref": "Prod-FR", "commit_message": "${{ env.LATEST_COMMIT_FR }}"}}'
 
-      - name: Run npm start and print commit hashes
+      - name: Trigger PROD-FR Workflow
         uses: peter-evans/repository-dispatch@v3.0.0
         with:
           repository: ashishguptasc/Test-1
