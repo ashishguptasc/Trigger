@@ -1,0 +1,127 @@
+# name: Trigger Test-1 Workflo
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   trigger:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout the trigger repo
+#         uses: actions/checkout@v3
+#         with:
+#           ref: main
+
+#       # - name: Checkout the repository with Prod-EN and Prod-FR branches
+#       #   uses: actions/checkout@v3
+#       #   with:
+#       #     repository: Subhanshu0027/Test-1
+#       #     token: ${{ secrets.PAT }}
+#       #     path: other-repo
+#       #     fetch-depth: 0  
+
+#       # - name: Fetch all branches from the other repo
+#       #   run: |
+#       #     cd other-repo
+#       #     git fetch --all
+
+#       # - name: Checkout Prod-EN branch and get latest commit message
+#       #   id: get_commit_en
+#       #   run: |
+#       #     cd other-repo
+#       #     git checkout Prod-EN
+#       #     latest_commit_message=$(git log -1 --pretty=%B)
+#       #     echo "LATEST_COMMIT_EN=${latest_commit_message}" >> $GITHUB_ENV
+#       #     echo "Latest commit message on Prod-EN: $latest_commit_message"
+
+#       # - name: Checkout Prod-FR branch and get latest commit message
+#       #   id: get_commit_fr
+#       #   run: |
+#       #     cd other-repo
+#       #     git checkout Prod-FR
+#       #     latest_commit_message=$(git log -1 --pretty=%B)
+#       #     echo "LATEST_COMMIT_FR=${latest_commit_message}" >> $GITHUB_ENV
+#       #     echo "Latest commit message on Prod-FR: $latest_commit_message"
+
+#       # - name: Log the Prod-EN payload
+#       #   run: |
+#       #     echo "Triggering Prod-EN workflow in Test-1 with the following payload:"
+#       #     echo '{"event_type": "event-1", "client_payload": {"ref": "Prod-EN", "commit_message": "${{ env.LATEST_COMMIT_EN }}"}}'
+
+#       # - name: Repository Dispatch
+#       #   uses: peter-evans/repository-dispatch@v3
+#       #   with:
+#       #     token: ${{ secrets.PAT }}
+#       #     repository: Subhanshu0027/Test-1
+#       #     event-type: my-event
+#       #     client-payload: '{"ref": "Prod-EN", "commit_message": "${{ env.LATEST_COMMIT_EN }}"}'
+
+#       # - name: Confirm Trigger for Prod-EN
+#       #   run: echo "Prod-EN trigger request sent. Check the repository dispatch logs for details."
+
+#       # - name: Log the Prod-FR payload
+#       #   run: |
+#       #     echo "Triggering Prod-FR workflow in Test-1 with the following payload:"
+#       #     echo '{"event_type": "trigger-prod-fr", "client_payload": {"ref": "Prod-FR", "commit_message": "${{ env.LATEST_COMMIT_FR }}"}}'
+
+#       - name: Run npm start and print commit hashes
+#         uses: peter-evans/repository-dispatch@v3.0.0
+#         with:
+#           repository: Subhanshu0027/Test-1
+#           token: ${{ secrets.PAT }}
+#           event-type: trigger-prod-fr
+#           # client-payload: '{"ref": "Prod-FR", "commit_message": "${{ env.LATEST_COMMIT_FR }}"}'
+
+#       - name: Confirm Trigger for Prod-FR
+#         run: echo "Prod-FR trigger request sent. Check the repository dispatch logs for details."
+
+#       - name: Log Repository Dispatch Result for Prod-EN
+#         run: |
+#           curl -H "Authorization: token ${{ secrets.PAT }}" \
+#                -H "Accept: application/vnd.github.v3+json" \
+#                https://api.github.com/repos/Subhanshu0027/Test-1/dispatches \
+#                -d '{"event_type":"event-1","client_payload":{"ref":"Prod-EN","commit_message":"${{ env.LATEST_COMMIT_EN }}"}}' \
+#                --fail \
+#                --silent \
+#                --show-error
+#         env:
+#           LATEST_COMMIT_EN: ${{ env.LATEST_COMMIT_EN }}
+
+#       - name: Log Repository Dispatch Result for Prod-FR
+#         run: |
+#           curl -H "Authorization: token ${{ secrets.PAT }}" \
+#                -H "Accept: application/vnd.github.v3+json" \
+#                https://api.github.com/repos/Subhanshu0027/Test-1/dispatches \
+#                -d '{"event_type":"trigger-prod-fr","client_payload":{"ref":"Prod-FR","commit_message":"${{ env.LATEST_COMMIT_FR }}"}}' \
+#                --fail \
+#                --silent \
+#                --show-error
+#         env:
+#           LATEST_COMMIT_FR: ${{ env.LATEST_COMMIT_FR }}
+
+name: Trigger Repository Dispatch
+
+on:
+  push:
+    branches:
+      - main
+  # workflow_dispatch:  # Allows manual triggering from the GitHub Actions UI
+
+jobs:
+  trigger_dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger repository dispatch
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.PAT }}
+        repository: Subhanshu0027/Test-1
+        event-type: event-1
+        ref: refs/heads/Prod-EN
+         
+
+
