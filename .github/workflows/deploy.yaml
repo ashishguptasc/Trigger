@@ -82,7 +82,7 @@ jobs:
         run: |
           curl -H "Authorization: token ${{ secrets.PAT }}" \
                -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/Subhanshu0027/Test-1/dispatches \
+               https://api.github.com/repos/ashishguptasc/Test-1/dispatches \
                -d '{"event_type":"event-1","client_payload":{"ref":"Prod-EN","commit_message":"${{ env.LATEST_COMMIT_EN }}"}}' \
                --fail \
                --silent \
@@ -94,7 +94,7 @@ jobs:
         run: |
           curl -H "Authorization: token ${{ secrets.PAT }}" \
                -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/Subhanshu0027/Test-1/dispatches \
+               https://api.github.com/repos/ashishguptasc/Test-1/dispatches \
                -d '{"event_type":"trigger-prod-fr","client_payload":{"ref":"Prod-FR","commit_message":"${{ env.LATEST_COMMIT_FR }}"}}' \
                --fail \
                --silent \
