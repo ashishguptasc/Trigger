@@ -45,12 +45,13 @@ jobs:
           latest_commit_message=$(git log -1 --pretty=%B)
           echo "LATEST_COMMIT_FR=${latest_commit_message}" >> $GITHUB_ENV
           echo "Latest commit message on Prod-FR: $latest_commit_message"
-
+       
       - name: Log the Prod-EN payload
         run: |
           echo "Triggering Prod-EN workflow in Test-1 with the following payload:"
           echo '{"event_type": "trigger-prod-en", "client_payload": {"ref": "Prod-EN", "commit_message": "${{ env.LATEST_COMMIT_EN }}"}}'
-
+      
+       #TRIGGER Test-1 Repo with EN branch
       - name: Trigger Prod-EN workflow
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -67,6 +68,7 @@ jobs:
           echo "Triggering Prod-FR workflow in Test-1 with the following payload:"
           echo '{"event_type": "trigger-prod-fr", "client_payload": {"ref": "Prod-FR", "commit_message": "${{ env.LATEST_COMMIT_FR }}"}}'
 
+       #TRIGGER Test-1 Repo with FR branch
       - name: Trigger Prod-FR workflow
         uses: peter-evans/repository-dispatch@v3
         with:
@@ -101,8 +103,15 @@ jobs:
                --show-error
         env:
           LATEST_COMMIT_FR: ${{ env.LATEST_COMMIT_FR }}
-
-        #TRIGGER Test-2 Repo with main file
+       #TRIGGER Test-1 Repo with main branch 
+      - name: Trigger (repo-Test-1-main)
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ashishguptasc/Test-1
+          event-type: event-2
+        
+       #TRIGGER Test-2 Repo with main file
 
       - name: Trigger repo-Test-2
         uses: peter-evans/repository-dispatch@v3
@@ -110,4 +119,3 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: ashishguptasc/Test-2
           event-type: test-2
-          
