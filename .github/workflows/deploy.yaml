@@ -102,8 +102,9 @@ jobs:
         env:
           LATEST_COMMIT_FR: ${{ env.LATEST_COMMIT_FR }}
 
+        #TRIGGER Test-2 Repo with main file
 
-      - name: Trigger Prod-EN workflow
+      - name: Trigger repo-Test-2
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.PAT }}
